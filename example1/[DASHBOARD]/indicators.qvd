@@ -1,0 +1,31 @@
+[Indicadores]:
+
+LOAD
+	Ano & Mês & "Unidade ID" as chave,  // Concatenação dos 3 campos, para a eliminação da criação automática da chave sintética criada, por parte do Clik.
+//     Ano,
+//     Mês,
+    Comarca,
+//     "Unidade ID",
+    "Tipo de Unidade Judicial",
+    Indicador,
+    "Classe Indicador",
+    "Unidade Nome",
+    Valor
+FROM [lib://Corporativo/Judicial/DW/T_DW_IndicadoresJN_v2_2022.qvd] (qvd)
+Where "Classe Indicador" = 'Casos Novos' or "Classe Indicador" = 'Baixados';
+// Where Match("Classe Indicador", 'Casos Novos', 'Baixados'); (outra forma de filtrar usando o comando where).
+
+Right Join
+
+LOAD
+	Ano & Mês & "Unidade ID" as chave,  // Concatenação dos 3 campos, para a eliminação da criação automática da chave sintética criada, por parte do Clik.
+//     "Unidade ID",
+//     Ano,
+//     Mês,
+    "Grupo de Comparação",
+    Observação,
+    Jurisdição,
+    Cejusc,
+    Subgrupo
+FROM [lib://Corporativo/Judicial/DW/T_DW_MapeamentoUnidadesHistorico.qvd] (qvd)
+Where "Ano" = '2022' and "Mês" = '5' and "Jurisdição" = '1G';
