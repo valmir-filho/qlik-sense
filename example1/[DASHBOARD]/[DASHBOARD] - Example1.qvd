@@ -1,0 +1,14 @@
+[D_Afastamento_Servidores]:
+
+LOAD
+    "Nome do Servidor",
+    "Enquadramento Funcional",
+    "Descrição do Afastamento",
+    "Data de Início do Afastamento",
+    "Data de Término do Afastamento",
+    "Data de Interrupção do Afastamento",
+    "N° de Dias de Afastamento",
+    "Número da Comarca",
+    "Nome da Comarca",
+    "Situação Atual do Servidor"
+FROM [lib://Cargas/Administrativo/Pessoal/Transformado/T_Afastamento_Servidores_Valmir.qvd] (qvd);
