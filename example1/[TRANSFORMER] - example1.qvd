@@ -1,0 +1,23 @@
+[T_Afastamento_Servidores]:
+
+LOAD
+    UPPER(nome) as 'Nome do Servidor',
+    quadro as 'Enquadramento Funcional',
+    descricao as 'Descrição do Afastamento',
+    DATE(datainicio, 'DD/MM/YYYY HH:MM:SS') as 'Data de Início do Afastamento',
+    datafinal as 'Data de Término do Afastamento',
+    datainterrupcao as 'Data de Interrupção do Afastamento',
+    NUM(dias, '#0') as 'N° de Dias de Afastamento',
+//     datafinal - datainicio as 'N° de Dias de Afastamento', (outra forma de calcular o número de dias de afastamento).
+    localizacao_comarca as 'Número da Comarca',
+    localizacao as 'Nome da Comarca',
+    if(Today() >= datainicio and Today() <= datafinal, 'Afastado', 'Em exercício') as 'Situação Atual do Servidor'
+FROM [lib://Cargas/Administrativo/Pessoal/Extracao/E_Afastamento_Servidores_Valmir.qvd] (qvd);
+// Where descricao = 'Licença Paternidade'; (criação de um filtro específico).
+
+Comment Table T_Afastamento_Servidores With 'Esta tabela foi transformada para apresentar informações sobre afastamentos.';
+Comment Field 'Situação Atual do Servidor' With 'Este campo mostra se o servidor encontra-se afastado ou em exercício.';
+
+STORE [T_Afastamento_Servidores] INTO 'lib://Cargas/Administrativo/Pessoal/Transformado/T_Afastamento_Servidores_Valmir.qvd' (qvd);
+
+DROP TABLE T_Afastamento_Servidores;
