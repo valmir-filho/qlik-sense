@@ -1,0 +1,28 @@
+LIB CONNECT TO 'Hercules (corporativo)';
+
+[E_Afastamento_Servidores]:
+
+LOAD "nome",
+    "quadro",
+    "descricao",
+    "datainicio",
+    "datafinal",
+    "datainterrupcao",
+    "dias",
+    "localizacao_comarca",
+    "localizacao";
+
+SQL SELECT "nome",
+    "quadro",
+    "descricao",
+    "datainicio",
+    "datafinal",
+    "datainterrupcao",
+    "dias",
+    "localizacao_comarca",
+    "localizacao"
+FROM "hercules"."hercules"."v_workshop_bi_afastamentos_servidores";
+
+STORE [E_Afastamento_Servidores] INTO 'lib://Cargas/Administrativo/Pessoal/Extracao/E_Afastamento_Servidores_Valmir.qvd' (qvd);
+
+DROP TABLE E_Afastamento_Servidores;
