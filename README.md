@@ -1,4 +1,4 @@
-# Qlik Sense Exercises.
+# Qlik Sense Repository.
 
 ## Content:
 
