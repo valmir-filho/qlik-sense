@@ -1,0 +1,30 @@
+// LIB CONNECT TO 'Moodle (corporativo)';
+
+[E_Certificados_Emissao]:
+
+LOAD "id",
+    "certificateid",
+    "userid",
+    "certificatename",
+    "code",
+    "timecreated",
+    "timedeleted",
+    "haschange",
+    "pathnamehash",
+    "coursename";
+
+SQL SELECT "id",
+    "certificateid",
+    "userid",
+    "certificatename",
+    "code",
+    "timecreated",
+    "timedeleted",
+    "haschange",
+    "pathnamehash",
+    "coursename"
+FROM "moodle"."public"."mdl_simplecertificate_issues";
+
+STORE E_Certificados_Emissao INTO [lib://Cargas/Administrativo/Escola/Extracao/E_Certificados_Emissao.qvd] (qvd);
+
+DROP TABLE E_Certificados_Emissao;
