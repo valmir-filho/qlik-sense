@@ -1,0 +1,26 @@
+// LIB CONNECT TO 'Moodle (corporativo)';
+
+[E_Conclusao_Cursos]:
+
+LOAD "id",
+    "userid",
+    "course",
+    "timeenrolled",
+    "timestarted",
+    "timecompleted",
+    "reaggregate";
+
+SQL SELECT "id",
+    "userid",
+    "course",
+    "timeenrolled",
+    "timestarted",
+    "timecompleted",
+    "reaggregate"
+FROM "moodle"."public"."mdl_course_completions";
+
+STORE E_Conclusao_Cursos INTO [lib://Cargas/Administrativo/Escola/Extracao/E_Conclusao_Cursos.qvd] (qvd);
+
+DROP TABLE E_Conclusao_Cursos;
+
+// Exit Script;
