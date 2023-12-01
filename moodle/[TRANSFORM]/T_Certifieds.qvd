@@ -1,0 +1,48 @@
+[T_Certificados]:
+
+LOAD
+    id as "ID Certificado",
+    course as "ID Curso",
+    name as "Tipo do Documento",
+    //intro
+    //introformat,
+    //timecreated,
+    Date(Makedate(1970, 1, 1) + (timemodified / 86400), 'DD/MM/YYYY') as "Data de Modificação do Certificado"
+    //width,
+    //height,
+    //certificateimage,
+    //certificatetext,
+    //certificatetextformat,
+    //certificatetextx,
+    //certificatetexty,
+    //coursename,
+    //coursehours,
+    //outcome,
+    //certdate,
+    //certdatefmt,
+    //certgrade,
+    //gradefmt,
+    //emailfrom,
+    //emailothers,
+    //emailteachers,
+    //reportcert,
+    //delivery,
+    //requiredtime,
+    //printqrcode,
+    //qrcodefirstpage,
+    //codex,
+    //codey,
+    //enablesecondpage,
+    //secondpagex,
+    //secondpagey,
+    //secondpagetext,
+    //secondpagetextformat,
+    //secondimage,
+    //timestartdatefmt
+FROM [lib://Cargas/Administrativo/Escola/Extracao/E_Certificados.qvd] (qvd);
+
+STORE T_Certificados INTO [lib://Corporativo/Administrativo/Escola/T_Certificados.qvd] (qvd);
+
+DROP TABLE T_Certificados;
+
+// Exit Script;
