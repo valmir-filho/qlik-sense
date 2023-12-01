@@ -1,0 +1,61 @@
+[T_Usuarios]:
+
+LOAD
+    id as "ID Usuário",
+//     auth,
+    if(confirmed = 1, 'Usuário Confirmado', 'Usuário não Confirmado') as "Confirmação Usuário",
+//     policyagreed,
+    if(deleted = 1, 'Usuário Excluído', 'Usuário não Excluído') as "Exclusão Usuário",
+    if(suspended = 1, 'Usuário Suspenso', 'Usuário não Suspenso') as "Suspensão Usuário",
+//     mnethostid,
+    username as "Login",
+//     "password",
+//     idnumber,
+    firstname as "Primeiro Nome do Usuário",
+    lastname as "Último Nome do Usuário",
+    firstname & ' ' & lastname as "Nome Completo do Usuário",
+    email as "Email",
+//     emailstop,
+    phone1 as "Telefone 1",
+    phone2 as "Telefone 2",
+    institution as "Instituição",
+    department as "Departamento",
+    address as "Endereço",
+    city as "Cidade",
+    country as "País",
+    lang as "Idioma",
+    calendartype as "Tipo de Calendário",
+//     theme ,
+//     "timezone",
+	Date(Makedate(1970, 1, 1) + (firstaccess / 86400), 'DD/MM/YYYY') as "Primeiro Acesso",
+    Date(Makedate(1970, 1, 1) + (lastaccess / 86400), 'DD/MM/YYYY') as "Último Acesso",
+    Date(Makedate(1970, 1, 1) + (lastlogin / 86400), 'DD/MM/YYYY') as "Último Login",
+    Date(Makedate(1970, 1, 1) + (currentlogin / 86400), 'DD/MM/YYYY') as "Login Atual",
+    lastip as "IP",
+//     secret,
+//     picture,
+    description as "Descrição",
+//     descriptionformat,
+//     mailformat,
+//     maildigest,
+//     maildisplay,
+//     autosubscribe,
+//     trackforums,
+	Date(Makedate(1970, 1, 1) + (timecreated / 86400), 'DD/MM/YYYY') as "Criação do Usuário",
+    Date(Makedate(1970, 1, 1) + (timemodified / 86400), 'DD/MM/YYYY') as "Modificação do Usuário",
+    cpf as "CPF",
+    quadro as "Quadro"
+//     trustbitmask,
+//     imagealt,
+//     lastnamephonetic,
+//     firstnamephonetic,
+//     middlename,
+//     alternatename,
+//     moodlenetprofile
+FROM [lib://Cargas/Administrativo/Escola/Extracao/E_Usuarios.qvd] (qvd);
+
+STORE T_Usuarios INTO [lib://Corporativo/Administrativo/Escola/T_Usuarios.qvd] (qvd);
+
+DROP TABLE T_Usuarios;
+
+// Exit Script;
