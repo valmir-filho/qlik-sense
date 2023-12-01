@@ -1,0 +1,18 @@
+[T_Certificados_Emissao]:
+
+LOAD
+    id as "ID de Emissão do Certificado",
+    certificateid as "ID Certificado",
+    "userid" as "ID Usuário",
+    certificatename as "Nome do Certificado",
+    code as "Código do Certificado",
+    Date(Makedate(1970, 1, 1) + (timecreated / 86400), 'DD/MM/YYYY') as "Data de Criação do Certificado",
+    Date(Makedate(1970, 1, 1) + (timedeleted / 86400), 'DD/MM/YYYY') as "Data de Exclusão do Certificado",
+//     haschange,
+//     pathnamehash,
+    coursename as "Nome do Curso no Certificado"
+FROM [lib://Cargas/Administrativo/Escola/Extracao/E_Certificados_Emissao.qvd] (qvd);
+
+STORE T_Certificados_Emissao INTO [lib://Corporativo/Administrativo/Escola/T_Certificados_Emissao.qvd] (qvd);
+
+DROP TABLE T_Certificados_Emissao;
