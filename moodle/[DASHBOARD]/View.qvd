@@ -1,0 +1,86 @@
+VIEW:
+
+LOAD
+    "ID Usuário",
+    "Confirmação Usuário",
+    "Exclusão Usuário",
+    "Suspensão Usuário",
+    Login,
+    "Primeiro Nome do Usuário",
+    "Último Nome do Usuário",
+    "Primeiro Nome do Usuário" & ' ' & "Último Nome do Usuário" as "Nome Completo do Usuário",
+    Email,
+    "Telefone 1",
+    "Telefone 2",
+    Instituição,
+    Departamento,
+    Endereço,
+    Cidade,
+    País,
+    Idioma,
+    "Tipo de Calendário",
+    "Primeiro Acesso",
+    "Último Acesso",
+    "Último Login",
+    "Login Atual",
+    IP,
+    Descrição,
+    "Criação do Usuário",
+    "Modificação do Usuário",
+    Text(CPF) as "CPF",
+    Quadro
+FROM [lib://Corporativo/Administrativo/Escola/T_Usuarios.qvd] (qvd);
+
+LOAD
+    "ID Curso",
+    Categoria,
+    Classificação,
+    "Nome Completo do Curso",
+    "Nome Abreviado do Curso",
+    "Data de Início do Curso",
+    "Criação do Curso",
+    "Modificação do Curso",
+    SEI,
+    "Autorização Curso",
+    "Número da Decisão",
+    "indicadores"
+FROM [lib://Corporativo/Administrativo/Escola/T_Cursos.qvd] (qvd);
+
+LOAD
+    "ID Curso Concluído",
+    "ID Usuário",
+    "ID Curso",
+    "Data de Inscrição no Curso",
+//     "Data de Início do Curso",
+    "Data de Término do Curso"
+FROM [lib://Corporativo/Administrativo/Escola/T_Conclusao_Cursos.qvd] (qvd);
+
+LOAD
+    "ID Certificado",
+    "ID Curso",
+    "Tipo do Documento",
+    "Data de Modificação do Certificado"
+FROM [lib://Corporativo/Administrativo/Escola/T_Certificados.qvd] (qvd);
+
+LOAD
+    "ID de Emissão do Certificado",
+    "ID Certificado",
+    "ID Usuário",
+    "Nome do Certificado",
+    "Código do Certificado",
+    "Data de Criação do Certificado",
+    "Data de Exclusão do Certificado",
+    "Nome do Curso no Certificado"
+FROM [lib://Corporativo/Administrativo/Escola/T_Certificados_Emissao.qvd] (qvd);
+
+LEFT JOIN (T_Certificados_Emissao)
+
+LOAD * RESIDENT T_Certificados;
+ 
+DROP TABLE T_Certificados;
+
+OUTER JOIN (T_Certificados_Emissao)
+
+LOAD * RESIDENT T_Conclusao_Cursos;
+
+DROP TABLE T_Conclusao_Cursos;
