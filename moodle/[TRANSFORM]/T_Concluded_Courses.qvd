@@ -1,0 +1,17 @@
+[T_Conclusao_Cursos]:
+
+LOAD
+    id as "ID Curso Concluído",
+    "userid" as "ID Usuário",
+    course as "ID Curso",
+    Date(Makedate(1970, 1, 1) + (timeenrolled / 86400), 'DD/MM/YYYY') as "Data de Inscrição no Curso",
+//     timeStamp(Makedate(1970,1,1) + timestarted /24/60/60 + Date((120/24/60) , 'DD-MM-YYYY hh:mm:ss')) as "Data de Início do Curso",
+    Date(Makedate(1970, 1, 1) + (timecompleted / 86400), 'DD/MM/YYYY') as "Data de Término do Curso"
+    //reaggregate tudo 0
+FROM [lib://Cargas/Administrativo/Escola/Extracao/E_Conclusao_Cursos.qvd] (qvd);
+
+STORE T_Conclusao_Cursos INTO [lib://Corporativo/Administrativo/Escola/T_Conclusao_Cursos.qvd] (qvd);
+
+DROP TABLE T_Conclusao_Cursos;
+
+// Exit Script;
