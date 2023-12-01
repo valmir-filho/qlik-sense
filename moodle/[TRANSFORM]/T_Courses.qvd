@@ -1,0 +1,50 @@
+[T_Cursos]:
+
+LOAD
+	id as "ID Curso",
+    category as "Categoria",
+    sortorder as "Classificação",
+    fullname as "Nome Completo do Curso",
+    shortname as "Nome Abreviado do Curso",
+    //idnumber,
+    //summary,
+    //summaryformat,
+    //format,
+    //showgrades,
+    //newsitems,
+    Date(Makedate(1970, 1, 1) + (startdate / 86400), 'DD/MM/YYYY') as "Data de Início do Curso",
+    //marker,
+    //xbytes,
+    //legacyfiles,
+    //showreports,
+    //visible,
+    //visibleold,
+    //groupmode,
+    //groupmodeforce,
+    //defaultgroupingid,
+    //lang,
+    //calendartype,
+    //theme,
+    Date(Makedate(1970, 1, 1) + (timecreated / 86400), 'DD/MM/YYYY') as "Criação do Curso",
+    Date(Makedate(1970, 1, 1) + (timemodified / 86400), 'DD/MM/YYYY') as "Modificação do Curso",
+	sei as "SEI",
+    if(cursoautorizado = 1, 'Curso Autorizado', 'Curso não Autorizado') as "Autorização Curso",
+	bruto as "Número da Decisão",
+    indicadores
+    //requested,
+    //enablecompletion,
+    //completionnotify,
+    //cacherev,
+    //enddate,
+    //relativedatesmode,
+    //originalcourseid,
+    //downloadcontent,
+    //showactivitydates,
+    //showcompletionconditions
+FROM [lib://Cargas/Administrativo/Escola/Extracao/E_Cursos.qvd] (qvd);
+
+STORE T_Cursos INTO [lib://Corporativo/Administrativo/Escola/T_Cursos.qvd] (qvd);
+
+DROP TABLE T_Cursos;
+
+// Exit Script;
