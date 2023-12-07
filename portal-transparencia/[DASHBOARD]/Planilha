@@ -1,0 +1,37 @@
+Planilha:
+
+LOAD
+    Nome,
+    CPF,
+    Matrícula,
+    Cargo,
+    "Função Cargo em Comissão",
+    Lotação,
+    "Ato de Provimento",
+    "Data da Publicação",
+    Comarca
+FROM [lib://Corporativo/Administrativo/Pessoal/Transparencia/T_Transparencia_AnexoV_Servidores.qvd] (qvd);
+
+LOAD
+    Nome,
+    CPF,
+    Matrícula,
+    Cargo,
+    "Função Cargo em Comissão",
+    Lotação,
+    Comarca,
+    "Ato de Provimento",
+    "Data da Publicação"
+FROM [lib://Corporativo/Administrativo/Pessoal/Transparencia/T_Transparencia_AnexoV_Magistrados.qvd] (qvd);
+
+LOAD
+    Nome,
+    CPF,
+    Matrícula,
+    Cargo,
+    "Função Cargo em Comissão",
+    Lotação,
+    Comarca,
+    "Data da Publicação",
+    "Ato de Provimento"
+FROM [lib://Corporativo/Administrativo/Pessoal/Transparencia/T_Transparencia_AnexoV_Conciliadores.qvd] (qvd);
