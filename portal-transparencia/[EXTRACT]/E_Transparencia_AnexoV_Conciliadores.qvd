@@ -1,0 +1,58 @@
+E_Transparencia_AnexoV_Conciliadores:
+
+SQL
+SELECT 
+		p.nome as Nome, 
+        p.cpf_cnpj as CPF, 
+        c.matriculaatual as Matricula,        
+        case when v.idtipovaga = 3 and p.idsexo = 1 then 'JUIZ LEIGO'
+        when v.idtipovaga = 3 and p.idsexo = 2 then 'JUÍZA LEIGA'
+        when v.idtipovaga = 4 and p.idsexo = 1 then 'CONCILIADOR'
+        when v.idtipovaga = 4 and p.idsexo = 2 then 'CONCILIADORA'
+        when v.idtipovaga = 12 and p.idsexo = 1 then 'CONCILIADOR'
+        when v.idtipovaga = 12 and p.idsexo = 2 then 'CONCILIADORA' 
+		when v.idtipovaga = 19 and p.idsexo = 1 then 'MEDIADOR'
+        when v.idtipovaga = 19 and p.idsexo = 2 then 'MEDIADORA'
+        when v.idtipovaga = 22 and p.idsexo = 1 then 'CONCILIADOR CEJUSC'
+        when v.idtipovaga = 22 and p.idsexo = 2 then 'CONCILIADORA CEJUSC'
+        when v.idtipovaga = 23 and p.idsexo = 1 then 'MEDIADOR/CONCILIADOR CEJUSC'
+        when v.idtipovaga = 23 and p.idsexo = 2 then 'MEDIADORA/CONCILIADORA CEJUSC' end as Cargo,
+	    null as FuncaoCargoComissao,
+		uu.nomereduzido||' - '|| u.nomecompleto as Lotacao,
+        uu.nomereduzido as comarca,
+        //case when vq.indicavoluntario = true then 'Voluntário' else 'Remunerado' end as Tipo,
+        case when ast.idassentamento is not null then to_char(ast.dataefeito, 'DD/MM/YYYY')
+        when astperm.idassentamento is not null then to_char(astperm.dataefeito, 'DD/MM/YYYY')
+        when astrem.idassentamento is not null then to_char(astrem.dataefeito, 'DD/MM/YYYY')
+        when astalt.idassentamento is not null then to_char(astalt.dataefeito, 'DD/MM/YYYY')
+        when astmed.idassentamento is not null then to_char(astmed.dataefeito, 'DD/MM/YYYY')
+        end as DataPublicacao,
+        case when ast.idassentamento is not null then ast.numeroato
+        when astperm.idassentamento is not null then astperm.numeroato
+        when astrem.idassentamento is not null then astrem.numeroato
+        when astalt.idassentamento is not null then astalt.numeroato
+        when astmed.idassentamento is not null then astmed.numeroato
+        end as AtoProvimento
+from hercules.vaga v
+inner join hercules.vagaquadro vq on v.idvaga = vq.idvaga
+inner join hercules.atribuicao a on a.idvagaquadro = vq.idvaga
+inner join hercules.pessoafisica p on a.idcolaborador = p.idpessoafisica
+inner join hercules.colaborador c on p.idpessoafisica = c.idpessoafisica
+left join hercules.assentamento ast on a.idatribuicao = ast.idatribuicao and ast.idacao = 1320
+left join hercules.assentamento astperm on a.idatribuicao = astperm.idatribuicao and astperm.idacao = 1970
+left join hercules.assentamento astrem on a.idatribuicao = astrem.idatribuicao and astrem.idacao = 1969
+left join hercules.assentamento astalt on a.idatribuicao = astalt.idatribuicao and astalt.idacao = 1853
+left join hercules.assentamento astmed on a.idatribuicao = astmed.idatribuicao and astmed.idacao = 2139
+inner join hercules.unidadeorganizacional u on v.idunidadeorganizacional = u.idunidadeorganizacional
+inner join hercules.unidadeorganizacional uu on uu.idunidadeorganizacional = u.idestruturahierarquica
+where v.idtipovaga in (3,4,12,19,22,23) 
+-- and u.idtipojuizado <> 4 -- comentado, pois CEJUSC é do tipo 4
+and a.idsituacaoatribuicao in (1,6)
+and a.datainicial <= $(pDtFim)
+and (a.datafinal is null OR (a.datafinal >= $(pDtIni) and a.datafinal <= $(pDtFim))) 
+and ast.idassentamentotornarsemefeito is null
+order by Nome, Lotacao, Cargo;
+
+STORE E_Transparencia_AnexoV_Conciliadores INTO [lib://Cargas/Administrativo/Pessoal/Transparencia/Extracao/E_Transparencia_AnexoV_Conciliadores.qvd];
+
+DROP TABLE E_Transparencia_AnexoV_Conciliadores;
