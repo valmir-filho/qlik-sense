@@ -1,0 +1,117 @@
+E_Transparencia_AnexoV_Magistrados:
+
+SQL
+with magistrados_localizacoes as
+(
+    select pf.nome as Nome, 
+               pf.cpf_cnpj as CPF, 
+               c.matriculaatual as Matricula,               
+               (
+                    select upper(cal.denominacao) 
+                    from hercules_log.atribuicao al 
+                    inner join hercules.vagaquadro vql on vql.idvaga = al.idvagaquadro
+                    inner join hercules.cargo cal on cal.idcargo = vql.idcargomagistratura 
+                    where al.idatribuicao = a.idatribuicao 
+                    and al.datahoralog <= (date_trunc('MONTH', to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) + INTERVAL '1 MONTH - 1 day')
+                    and ( 
+                                exists (
+                                           select 1
+                                           from hercules.movimentacaocarreiramagistratura mc 
+                                           where mc.idatribuicao = al.idatribuicao and mc.idvagaquadro = al.idvagaquadro
+                                           and mc.datapublicacao <= (date_trunc('MONTH', to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) + INTERVAL '1 MONTH - 1 day')
+                                           ) 
+                                or 
+                                not exists (
+                                           select 1
+                                           from hercules.movimentacaocarreiramagistratura mc 
+                                           where mc.idatribuicao = al.idatribuicao and mc.idvagaquadro = al.idvagaquadro
+                                       )
+                            )
+                    order by datahoralog desc limit 1
+               ) as Cargo,
+               (
+                   select u.nomecompleto
+                   from hercules.localizacao l
+                   inner join hercules.unidadeorganizacional u on l.idunidadeorganizacional = u.idunidadeorganizacional
+                   where l.idatribuicao = a.idatribuicao
+                   and l.idsituacaolocalizacao not in (6, 11) -- cancelado, tornado sem efeito
+                   and l.idtipolocalizacao = 3
+                   and  ( (l.datafinal is null or l.datafinal >= to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) and l.datainicial <= (date_trunc('MONTH', to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) + INTERVAL '1 MONTH - 1 day') )
+
+                ) lotacaoJuizauxiliar,
+                (
+                    --select r.idqualificadorresponsabilidade || ' - ' || u.nomecompleto || ' - ' || r.datainicial 
+                    select u.nomecompleto
+                    from hercules.responsabilidade r 
+                    inner join hercules.vaga vr on r.idvagafuncao = vr.idvaga
+                    inner join hercules.vagafuncao vf on vr.idvaga = vf.idvaga
+                    inner join hercules.unidadeorganizacional u on u.idunidadeorganizacional = vr.idunidadeorganizacional
+                    where r.idatribuicao = a.idatribuicao
+                    and vf.idfuncao in (6, 7, 8, 9, 10) -- membro de câmara
+                    and r.idqualificadorresponsabilidade in (1, 2) -- titular, interino
+                    and r.idsituacaoresponsabilidade not in (7, 9) -- cancelada, tornada sem efeito
+                    and (
+                                ( (r.datafinal is null or r.datafinal >= to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) and r.datainicial <= (date_trunc('MONTH', to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) + INTERVAL '1 MONTH - 1 day') )
+                                or
+                                r.datainicial <= (date_trunc('MONTH', to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) + INTERVAL '1 MONTH - 1 day')
+                           )
+                    order by datainicial desc limit 1 
+                )  as LotacaoMembroCamara,
+                (
+                   select
+                        case 
+                            when uc.tipounidadeorganizacional = 'COMARCA' then uc.nomereduzido || ' - ' || u.nomecompleto
+                            when ucs.nomereduzido is not null then ucs.nomereduzido || ' - ' || u.nomecompleto
+                            when u.idtipounidadecolegiada = 7 then u.nomecompleto -- turma recursal
+                            else uc.nomecompleto || ' - ' || u.nomecompleto
+                        end
+                   from hercules.localizacao l
+                   inner join hercules.unidadeorganizacional u on l.idunidadeorganizacional = u.idunidadeorganizacional
+                   left join hercules.unidadeorganizacional uc on uc.idunidadeorganizacional = u.idestruturahierarquica 
+                   left join hercules.unidadeorganizacional ucs on ucs.idunidadeorganizacional = u.idcomarcasedesecaojudiciaria
+                   where l.idatribuicao = a.idatribuicao
+                   and l.idsituacaolocalizacao not in (6, 11) -- cancelado, tornado sem efeito
+                   and l.idtipolocalizacao = 1
+                   and  ( (l.datafinal is null or l.datafinal >= to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) and l.datainicial <= (date_trunc('MONTH', to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) + INTERVAL '1 MONTH - 1 day') )                   
+                   order by datainicial desc limit 1 
+                ) as LotacaoMagistrado,
+               ast.texto as AtoProvimento, 
+               to_char(ast.dataefeito, 'DD/MM/YYYY') as DataPublicacao
+    from hercules.pessoafisica pf
+    inner join hercules.atribuicao a on pf.idpessoafisica = a.idcolaborador
+    inner join hercules.colaborador c on pf.idpessoafisica = c.idpessoafisica
+    inner join hercules.vaga v on v.idvaga = a.idvagaquadro
+    inner join hercules.vagaquadro vq on vq.idvaga = a.idvagaquadro
+    inner join hercules.cargo ca on ca.idcargo = vq.idcargomagistratura
+    inner join hercules.assentamento ast on ast.idatribuicao = a.idatribuicao and idacao = 2124
+    where (a.datafinal is null or a.datafinal >= to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) and a.datainicial <= (date_trunc('MONTH', to_date('01/' || $(pMes) || '/' || $(pAno), 'DD/MM/YYYY')) + INTERVAL '1 MONTH - 1 day')
+    and a.idsituacaoatribuicao not in (15, 21)
+)
+select
+    Nome,
+    Cpf,
+    Matricula,
+    Cargo,
+    null as FuncaoCargoComissao,
+    case 
+        when lotacaoJuizauxiliar is not null then lotacaoJuizauxiliar
+        when LotacaoMembroCamara is not null and cargo in ('DESEMBARGADOR', 'JUIZ DE DIREITO SUBSTITUTO EM SEGUNDO GRAU') then LotacaoMembroCamara
+        else LotacaoMagistrado 
+    end as Lotacao,
+    trim(substring(case 
+        when lotacaoJuizauxiliar is not null then lotacaoJuizauxiliar
+        when LotacaoMembroCamara is not null and cargo in ('DESEMBARGADOR', 'JUIZ DE DIREITO SUBSTITUTO EM SEGUNDO GRAU') then LotacaoMembroCamara
+        else LotacaoMagistrado 
+         end, 1, position(' - ' in case 
+                            when lotacaoJuizauxiliar is not null then lotacaoJuizauxiliar
+                            when LotacaoMembroCamara is not null and cargo in ('DESEMBARGADOR', 'JUIZ DE DIREITO SUBSTITUTO EM SEGUNDO GRAU') then LotacaoMembroCamara
+                            else LotacaoMagistrado 
+                        end))) as Comarca,
+    AtoProvimento, 
+    DataPublicacao    
+from magistrados_localizacoes
+order by Cargo, Nome;
+
+STORE E_Transparencia_AnexoV_Magistrados INTO [lib://Cargas/Administrativo/Pessoal/Transparencia/Extracao/E_Transparencia_AnexoV_Magistrados.qvd];
+
+DROP TABLE E_Transparencia_AnexoV_Magistrados;
