@@ -1,0 +1,6 @@
+LIB CONNECT TO 'Hercules (corporativo)';
+
+pAno = Year(AddMonths( Today(), -1))
+pMes = Num(Month(AddMonths( Today(), -1)), '00');
+pDtIni = Chr(39) & MonthStart('01/' & $(pMes) & '/' & $(pAno)) & Chr(39);
+pDtFim = Chr(39) & MonthEnd('01/' & $(pMes) & '/' & $(pAno)) & Chr(39);
