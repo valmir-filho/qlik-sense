@@ -1,0 +1,18 @@
+T_Transparencia_AnexoV_Conciliadores:
+
+LOAD
+    nome as "Nome",
+    cpf as "CPF",
+    matricula as "Matrícula",
+    cargo as "Cargo",
+    funcaocargocomissao as "Função Cargo em Comissão",
+    lotacao as "Lotação",
+    comarca as "Comarca",
+    datapublicacao as "Data da Publicação",
+    atoprovimento as "Ato de Provimento"
+    
+FROM [lib://Cargas/Administrativo/Pessoal/Transparencia/Extracao/E_Transparencia_AnexoV_Conciliadores.qvd] (qvd);
+
+STORE T_Transparencia_AnexoV_Conciliadores INTO [lib://Corporativo/Administrativo/Pessoal/Transparencia/T_Transparencia_AnexoV_Conciliadores.qvd];
+
+DROP TABLE T_Transparencia_AnexoV_Conciliadores;
