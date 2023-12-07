@@ -1,0 +1,18 @@
+T_Transparencia_AnexoV_Servidores:
+
+LOAD
+    nome as "Nome",
+    cpf as "CPF",
+    matricula as "Matrícula",
+    cargo as "Cargo",
+    funcaocargocomissao as "Função Cargo em Comissão",
+    lotacao as "Lotação",
+    atoprovimento as "Ato de Provimento",
+    datapublicacao as "Data da Publicação",
+    comarca as "Comarca"
+
+FROM [lib://Cargas/Administrativo/Pessoal/Transparencia/Extracao/E_Transparencia_AnexoV_Servidores.qvd] (qvd);
+
+STORE T_Transparencia_AnexoV_Servidores INTO [lib://Corporativo/Administrativo/Pessoal/Transparencia/T_Transparencia_AnexoV_Servidores.qvd];
+
+DROP TABLE T_Transparencia_AnexoV_Servidores;
