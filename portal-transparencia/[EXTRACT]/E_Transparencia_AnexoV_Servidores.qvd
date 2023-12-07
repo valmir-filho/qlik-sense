@@ -1,0 +1,23 @@
+E_Transparencia_AnexoV_Servidores:
+
+SQL
+select Nome,
+		CPF,
+        Matricula,
+        Cargo,
+        "Função/CargoComissão" as FuncaoCargoComissao,
+        "localizacao principal" as Lotacao,
+        "Ato Nomeação" as AtoProvimento,
+        "Data Publicação" as DataPublicacao,
+        coalesce(us.nomereduzido, uc.nomereduzido, ucj.nomereduzido, ucs.nomereduzido, 'Curitiba') as comarca 
+from hercules.fn_planilha_localizacoes_principais_chefias(current_date) p
+left join hercules.vm_unidadeorganizacional_tree_historico u on u.nomecompleto_fullname = p."localizacao principal"
+left join hercules.unidadeorganizacional uc on uc.idunidadeorganizacional = u.idestruturahierarquica and uc.tipounidadeorganizacional = 'COMARCA'
+left join hercules.unidadeorganizacional us on us.idunidadeorganizacional = u.idcomarcasedesecaojudiciaria and us.tipounidadeorganizacional = 'COMARCA'
+left join hercules.unidadeorganizacional uj on uj.idunidadeorganizacional = u.idestruturahierarquica and uj.tipounidadeorganizacional in ('UNIDADE_JUDICIAL', 'SECAO_JUDICIARIA', 'DIRECAO_FORUM')
+left join hercules.unidadeorganizacional ucj on ucj.idunidadeorganizacional = uj.idestruturahierarquica and ucj.tipounidadeorganizacional = 'COMARCA'
+left join hercules.unidadeorganizacional ucs on ucs.idunidadeorganizacional = uj.idcomarcasedesecaojudiciaria and ucs.tipounidadeorganizacional = 'COMARCA';
+
+STORE E_Transparencia_AnexoV_Servidores INTO [lib://Cargas/Administrativo/Pessoal/Transparencia/Extracao/E_Transparencia_AnexoV_Servidores.qvd];
+
+DROP TABLE E_Transparencia_AnexoV_Servidores;
