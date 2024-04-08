@@ -1,0 +1,23 @@
+[T_Assinatura]:
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+LOAD
+    id,
+    data_assinatura,
+    hash,
+    ip,
+    sistema,
+    totp,
+    usuario,
+    provider,
+    issuer,
+    id_arquivo,
+    descricao
+FROM [lib://Cargas/Judicial/MonitoramentoAppTJPRJus/Extracao/E_Assinatura.qvd] (qvd);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+STORE T_Assinatura INTO [lib://Corporativo/Judicial/MonitoramentoAppTJPRJus/Transformacao/T_Assinatura.qvd] (qvd);
+
+DROP TABLE T_Assinatura;
