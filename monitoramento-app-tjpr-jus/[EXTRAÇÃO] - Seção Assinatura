@@ -1,0 +1,38 @@
+LIB CONNECT TO 'PostgreSQL_assinador-db(pg-sa03-prd) (tjpr_falm)';
+
+[E_Assinatura]:
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+LOAD
+	id, 
+	data_assinatura, 
+	hash, 
+	ip, 
+	sistema, 
+	totp, 
+	usuario, 
+	provider, 
+	issuer, 
+	id_arquivo, 
+	descricao;
+
+SELECT
+	"id",
+	"data_assinatura",
+	"hash",
+	"ip",
+	"sistema",
+	"totp",
+	"usuario",
+	"provider",
+	"issuer",
+	"id_arquivo",
+	"descricao"
+FROM "public"."assinatura";
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+STORE [E_Assinatura] INTO [lib://Cargas/Judicial/MonitoramentoAppTJPRJus/Extracao/E_Assinatura.qvd] (qvd);
+ 
+DROP TABLE [E_Assinatura];
