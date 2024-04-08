@@ -1,0 +1,86 @@
+[Monitoramento]:
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+LOAD
+    idlogaplicacao,
+    cpf,
+    datahorasolicitacao,
+    datahoraretorno,
+    operacao,
+    sucesso,
+    msg,
+    ip,
+    porta,
+    so,
+    versaoso,
+    nomedispositivo,
+    "useragent",
+    pergunta,
+    "Número de Processo",
+    "Unidade Julgadora ID",
+    "ID Conclusão",
+    "Comarca Projudi",
+    "Vara Projudi",
+    "Nível de Sigilo",
+    "Número Único",
+    login,
+    Magistrado
+FROM [lib://Corporativo/Judicial/MonitoramentoAppTJPRJus/Transformacao/T_Appjus.qvd] (qvd);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+LOAD
+    id,
+    data_assinatura,
+    hash,
+    ip,
+    sistema,
+    totp,
+    usuario,
+    provider,
+    issuer,
+    id_arquivo,
+    descricao
+FROM [lib://Corporativo/Judicial/MonitoramentoAppTJPRJus/Transformacao/T_Assinatura.qvd] (qvd);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+LOAD
+    "Seção Judiciária ID",
+    "Seção Judiciária Area",
+    "Seção Judiciária Area Simples"
+FROM [lib://Corporativo/Administrativo/Organizacional/T_SecaoJudiciariaMapa.qvd] (qvd);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+LOAD
+    "Comarca ID",
+    "Comarca Area",
+    "Comarca Area Centro",
+    "Comarca Area Simples"
+FROM [lib://Corporativo/Administrativo/Organizacional/T_ComarcasMapa.qvd] (qvd);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+LOAD
+    "Município IBGE ID",
+    "Comarca ID",
+    Comarca,
+    "Comarca Original",
+    "Comarca Nome Oficial",
+    "Seção Judiciária ID",
+    "Seção Judiciária",
+    "Seção Judiciária Oficial",
+    "Seção Judiciária - Comarca Sede",
+    Entrância,
+    "Município ID",
+    Município,
+    "Município para MAPA",
+    "Município CNJ ID",
+    "Comarca Latitude",
+    "Comarca Longitude",
+    "Município Area Centro",
+    "Município Area",
+    "Município Area Simples"
+FROM [lib://Corporativo/Administrativo/Organizacional/T_ComarcasMunicipiosMapa.qvd] (qvd);
