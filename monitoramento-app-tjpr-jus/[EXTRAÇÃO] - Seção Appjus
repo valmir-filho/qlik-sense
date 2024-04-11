@@ -19,8 +19,8 @@ LOAD
 	versaoso, 
 	nomedispositivo, 
 	useragent,
-  pergunta,
-  idconclusao;
+    	pergunta,
+    	idconclusao;
 
 SELECT
 	"idlogaplicacao",
@@ -37,8 +37,8 @@ SELECT
 	"versaoso",
 	"nomedispositivo",
 	"useragent",
-  'conclusoes1G' as pergunta,
-  substring(l.operacao from ':finalizar/(.+)\?login=')::integer as idconclusao
+    	'conclusoes1G' as pergunta,
+	substring(l.operacao from ':finalizar/(.+)\?login=')::integer as idconclusao
 FROM "appjus"."logaplicacao" l where operacao ilike '%conclusoes1G:finalizar%' and sucesso = true and datahoraretorno::timestamp < current_date;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -88,6 +88,27 @@ SELECT
 FROM appjus.logaplicacao l where operacao ilike '%acordaos:finalizar%' or operacao ilike '%declaracoes-de-voto:finalizar%' and sucesso = true;
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+Concatenate([E_Appjus])
+
+SELECT
+	"idlogaplicacao",
+	"cpf",
+	"login",
+	"datahorasolicitacao",
+	"datahoraretorno",
+	"operacao",
+	"sucesso",
+	"msg",
+	"ip",
+	"porta",
+	"so",
+	"versaoso",
+	"nomedispositivo",
+	"useragent",
+	'login' as pergunta,
+	substring(l.operacao from ':finalizar/(.+)\?login=') as idconclusao
+FROM appjus.logaplicacao l where operacao ilike '%logins%' and sucesso = true;
 
 STORE [E_Appjus] INTO [lib://Cargas/Judicial/MonitoramentoAppTJPRJus/Extracao/E_Appjus.qvd] (qvd);
  
