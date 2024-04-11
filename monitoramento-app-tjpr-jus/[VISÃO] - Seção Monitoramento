@@ -37,7 +37,7 @@ LOAD
     ip as "IP Assinatura",
     sistema,
     totp,
-    login,
+    usuario,
     provider,
     issuer,
     id_arquivo,
