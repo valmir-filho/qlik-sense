@@ -36,7 +36,7 @@ FROM [lib://Corporativo/Judicial/Geral/T_ConclusoesProcessosProjudi_AnoDeEnvio_*
 LEFT JOIN(T_Appjus_1G)
 
 LOAD 
-	"Número de Processo",
+    "Número de Processo",
     "Unidade Julgadora ID",     
     "ID Conclusão"
     
@@ -59,7 +59,7 @@ FROM [lib://Corporativo/Judicial/Geral/T_BaseVarasProjudi.qvd] (qvd);
 LEFT JOIN(T_Appjus_1G)
 
 LOAD 
-	"Unidade Julgadora ID", 
+    "Unidade Julgadora ID", 
     "Comarca Projudi", 
     "Vara Projudi"
 
@@ -82,7 +82,7 @@ FROM [lib://Corporativo/Judicial/Geral/T_Processos.qvd] (qvd);
 LEFT JOIN(T_Appjus_1G)
 
 LOAD 
-	"Número de Processo",
+    "Número de Processo",
     "Nível de Sigilo",
     "Número Único"
 
@@ -104,7 +104,7 @@ FROM [lib://Corporativo/Administrativo/Pessoal/T_Magistrados.qvd] (qvd);
 LEFT JOIN(T_Appjus_1G)
 
 LOAD
-	login,
+    login,
     Magistrado
 
 Resident T_Magistrado_1G;
@@ -149,7 +149,7 @@ FROM [lib://Projudi-Extracao-Restrito/E_Decisoes_Monocraticas_Colegiadas.qvd] (q
 LEFT JOIN(T_Appjus_Conclusoes_2G_Sessao_Turma)
 
 LOAD 
-	"Número de Processo",
+    "Número de Processo",
     "Unidade Julgadora ID",
     "ID Conclusão"
     
@@ -172,7 +172,7 @@ FROM [lib://Corporativo/Judicial/Geral/T_BaseCamarasTurmasRecursaisProjudi_2GTR.
 LEFT JOIN(T_Appjus_Conclusoes_2G_Sessao_Turma)
 
 LOAD
-	"Unidade Julgadora ID",
+    "Unidade Julgadora ID",
     "Comarca Projudi",
     "Vara Projudi"
     
@@ -195,9 +195,9 @@ FROM [lib://Corporativo/Judicial/Geral/T_Recursos.qvd] (qvd);
 LEFT JOIN(T_Appjus_Conclusoes_2G_Sessao_Turma)
 
 LOAD 
-	"Número de Processo",
+    "Número de Processo",
     "Nível de Sigilo",
-	"Número Único"
+    "Número Único"
 Resident T_Sigilo_Processo_2G;
 
 DROP TABLE T_Sigilo_Processo_2G;
@@ -216,7 +216,7 @@ FROM [lib://Corporativo/Administrativo/Pessoal/T_Magistrados.qvd] (qvd);
 LEFT JOIN(T_Appjus_Conclusoes_2G_Sessao_Turma)
 
 LOAD
-	login,
+    login,
     Magistrado
 
 Resident T_Magistrado_2G;
@@ -261,7 +261,7 @@ FROM [lib://Projudi-Extracao-Restrito/E_SessaoDigital_2G_TR.qvd] (qvd);
 LEFT JOIN(T_Appjus_Conclusoes_2G_Sessao_Digital)
 
 LOAD 
-	"Número de Processo",
+    "Número de Processo",
     "Unidade Julgadora ID",
     "ID Conclusão"
     
@@ -284,7 +284,7 @@ FROM [lib://Corporativo/Judicial/Geral/T_BaseCamarasTurmasRecursaisProjudi_2GTR.
 LEFT JOIN(T_Appjus_Conclusoes_2G_Sessao_Digital)
 
 LOAD
-	"Unidade Julgadora ID",
+    "Unidade Julgadora ID",
     "Comarca Projudi",
     "Vara Projudi"
     
@@ -307,9 +307,9 @@ FROM [lib://Corporativo/Judicial/Geral/T_Recursos.qvd] (qvd);
 LEFT JOIN(T_Appjus_Conclusoes_2G_Sessao_Digital)
 
 LOAD 
-	"Número de Processo",
+    "Número de Processo",
     "Nível de Sigilo",
-	"Número Único"
+    "Número Único"
 
 Resident T_Sigilo_Processo_2G;
 
@@ -329,7 +329,7 @@ FROM [lib://Corporativo/Administrativo/Pessoal/T_Magistrados.qvd] (qvd);
 LEFT JOIN(T_Appjus_Conclusoes_2G_Sessao_Digital)
 
 LOAD
-	login,
+    login,
     Magistrado
 
 Resident T_Magistrado_2G;
@@ -373,7 +373,7 @@ FROM [lib://Corporativo/Administrativo/Pessoal/T_Magistrados.qvd] (qvd);
 LEFT JOIN(T_Appjus_Instalacoes)
 
 LOAD
-	login,
+    login,
     Magistrado
 
 Resident T_Magistrado_2G;
@@ -387,7 +387,7 @@ NoConcatenate
 [T_Appjus_Completo]:
 
 LOAD   
-	idlogaplicacao,
+    idlogaplicacao,
     cpf,
     datahorasolicitacao,
     datahoraretorno,
@@ -401,7 +401,7 @@ LOAD
     nomedispositivo,
     "useragent",
     pergunta,
-	"Número de Processo",
+    "Número de Processo",
     "Unidade Julgadora ID",     
     "ID Conclusão",
     "Comarca Projudi", 
@@ -418,7 +418,7 @@ RESIDENT T_Appjus_1G;
 Concatenate(T_Appjus_Completo)
 
 LOAD   
-	idlogaplicacao,
+    idlogaplicacao,
     cpf,
     datahorasolicitacao,
     datahoraretorno,
@@ -432,7 +432,7 @@ LOAD
     nomedispositivo,
     "useragent",
     pergunta,
-	"Número de Processo",
+    "Número de Processo",
     "Unidade Julgadora ID",     
     "ID Conclusão",
     "Comarca Projudi", 
@@ -449,7 +449,7 @@ RESIDENT T_Appjus_Conclusoes_2G_Sessao_Turma;
 Concatenate(T_Appjus_Completo)
 
 LOAD   
-	idlogaplicacao,
+    idlogaplicacao,
     cpf,
     datahorasolicitacao,
     datahoraretorno,
@@ -463,7 +463,7 @@ LOAD
     nomedispositivo,
     "useragent",
     pergunta,
-	"Número de Processo",
+    "Número de Processo",
     "Unidade Julgadora ID",     
     "ID Conclusão",
     "Comarca Projudi", 
@@ -480,7 +480,7 @@ RESIDENT T_Appjus_Conclusoes_2G_Sessao_Digital;
 Concatenate(T_Appjus_Completo)
 
 LOAD   
-	idlogaplicacao,
+    idlogaplicacao,
     cpf,
     datahorasolicitacao,
     datahoraretorno,
@@ -494,7 +494,7 @@ LOAD
     nomedispositivo,
     "useragent",
     pergunta,
-	login,
+    login,
     Magistrado
  
 RESIDENT [T_Appjus_Instalacoes];
