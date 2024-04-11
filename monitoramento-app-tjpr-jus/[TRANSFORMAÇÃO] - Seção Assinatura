@@ -9,7 +9,7 @@ LOAD
     ip,
     sistema,
     totp,
-    usuario as login,
+    usuario,
     provider,
     issuer,
     id_arquivo,
